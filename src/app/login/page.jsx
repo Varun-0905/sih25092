@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-// Force dynamic rendering to avoid SSR issues with useSearchParams
-export const dynamic = 'force-dynamic';
+// Remove dynamic route segment config since this is a Client Component
+// export const dynamic = 'force-dynamic';
 
 // Component that uses useSearchParams
 function LoginForm() {
@@ -38,8 +38,12 @@ function LoginForm() {
       const data = await response.json();
 
       if (response.ok) {
-        // Login successful, redirect to landing page
-        router.push('/landing');
+        // Login successful, route based on role using full reload to update header state
+        if (data.role === 'admin') {
+          window.location.href = '/admin';
+        } else {
+          window.location.href = '/';
+        }
       } else {
         setError(data.message || 'Login failed');
       }

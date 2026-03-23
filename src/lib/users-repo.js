@@ -2,8 +2,7 @@ import bcrypt from 'bcryptjs';
 import connectDB from './mongodb.js';
 import User from '../models/User.js';
 
-// Connect to MongoDB when the module is imported
-connectDB();
+// Removed static connectDB() to prevent crashing on missing MONGODB_URI on startup
 
 export async function getUserByEmail(email) {
   try {

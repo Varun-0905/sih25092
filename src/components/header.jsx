@@ -36,7 +36,7 @@ export const HeroHeader = () => {
 
     const getDashboardLink = () => {
         if (!user) return '/login'
-        return user.role === 'admin' ? '/admin' : '/dashboard'
+        return user.role === 'admin' ? '/admin' : '/'
     }
 
     const handleLogout = async () => {
@@ -111,7 +111,7 @@ export const HeroHeader = () => {
                                             <Link
                                                 href={getDashboardLink()}
                                                 className="text-muted-foreground hover:text-accent-foreground block duration-150">
-                                                <span>Dashboard</span>
+                                                <span>{user.role === 'admin' ? 'Admin Panel' : 'Home'}</span>
                                             </Link>
                                         </li>
                                     )}
@@ -155,7 +155,7 @@ export const HeroHeader = () => {
                                             <Link
                                                 href={getDashboardLink()}
                                                 className="text-muted-foreground hover:text-accent-foreground block duration-150">
-                                                <span>Dashboard</span>
+                                                <span>{user.role === 'admin' ? 'Admin Panel' : 'Home'}</span>
                                             </Link>
                                         </li>
                                     )}

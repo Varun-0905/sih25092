@@ -14,6 +14,47 @@ export async function POST(req) {
     const body = await req.json();
     const { email, password } = schema.parse(body);
 
+    // Hardcode demo accounts for immediate access
+    if (email === 'admin@college.edu' && password === 'admin123') {
+      const token = signJwt({ sub: 'demo_admin', email: 'admin@college.edu', role: 'admin' });
+      const response = NextResponse.json({ id: 'demo_admin', email: 'admin@college.edu', name: 'Demo Admin', role: 'admin' }, { status: 200 });
+      
+      response.cookies.set({
+        name: cookieName,
+        value: token,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        maxAge: cookieMaxAge,
+      });
+      return response;
+    }
+
+    if (email === 'student@college.edu' && password === 'student123') {
+      const token = signJwt({ sub: 'demo_student', email: 'student@college.edu', role: 'student' });
+      const response = NextResponse.json({ id: 'demo_student', email: 'student@college.edu', name: 'Demo Student', role: 'student' }, { status: 200 });
+      
+      response.cookies.set({
+        name: cookieName,
+        value: token,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        maxAge: cookieMaxAge,
+      });
+      return response;
+    }
+
+    // Attempt real database login
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { message: 'Database is not configured. Please use demo accounts.' }, 
+        { status: 401 }
+      );
+    }
+
     // Find user by email
     const user = await getUserByEmail(email);
     if (!user) {
